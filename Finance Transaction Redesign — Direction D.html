@@ -1,0 +1,1489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance · Transaction Detail — Inline Actions</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Rubik:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ── Super Design System tokens ── */
+  :root {
+    --red-50: #fff1f1; --red-100: #ffd6d7; --red-200: #faadad;
+    --red-400: #f76262; --red-500: #ff0000; --red-550: #fd0104;
+    --red-600: #e80104; --red-650: #ea060a; --red-700: #c00103;
+    --red-800: #8a0102; --red-900: #520001;
+    --yellow-50: #fffce0; --yellow-100: #ffe200; --yellow-200: #ffd400;
+    --yellow-400: #f5b800; --yellow-600: #c89400; --yellow-800: #8a6500;
+    --purple-50: #f5e6ff; --purple-100: #e6c2ff; --purple-300: #b366e0;
+    --purple-500: #8a2bc8; --purple-700: #6b008f; --purple-900: #4c006e;
+    --magenta-50: #ffe6f1; --magenta-100: #ffbfdc; --magenta-300: #d44e8f;
+    --magenta-500: #b00069; --magenta-700: #99005c; --magenta-800: #8d0052;
+    --magenta-900: #66003c;
+    --blue-50: #e8f3ff; --blue-100: #b8dafc; --blue-300: #67afed;
+    --blue-500: #2293e7; --blue-600: #2b88d8; --blue-700: #1e6cb0;
+    --blue-900: #0a3a66;
+    --green-50: #e6f7ec; --green-100: #b8e8c6; --green-300: #5fc684;
+    --green-500: #1aa050; --green-600: #128841; --green-700: #0c6b33;
+    --green-900: #053a1a;
+    --orange-50: #fff4e0; --orange-100: #ffd9a6; --orange-300: #ffaa4d;
+    --orange-500: #f5841f; --orange-700: #c25e00; --orange-900: #6e3500;
+    --neutral-0: #ffffff; --neutral-25: #fafbfc; --neutral-50: #f2f4f5;
+    --neutral-100: #e9ebed; --neutral-200: #d6dbde; --neutral-300: #cad0d4;
+    --neutral-400: #9b9b9b; --neutral-500: #7a8893; --neutral-550: #73818c;
+    --neutral-600: #61727e; --neutral-700: #5d707b; --neutral-800: #3c4851;
+    --neutral-850: #2e3637; --neutral-900: #232d36; --neutral-925: #1c2b33;
+    --neutral-950: #171a1c; --neutral-1000: #000000;
+    --color-brand: var(--red-550); --color-brand-strong: var(--red-650);
+    --color-brand-soft: var(--red-50); --color-on-brand: #ffffff;
+    --color-danger: var(--red-600); --color-danger-soft: var(--red-50);
+    --color-success: var(--green-500); --color-success-soft: var(--green-50);
+    --color-warning: var(--orange-500); --color-warning-soft: var(--orange-50);
+    --color-info: var(--blue-500); --color-info-soft: var(--blue-50);
+    --color-bg: var(--neutral-0); --color-bg-subtle: var(--neutral-50);
+    --color-bg-muted: var(--neutral-100); --color-surface: var(--neutral-0);
+    --color-fg: var(--neutral-900); --color-fg-muted: var(--neutral-700);
+    --color-fg-subtle: var(--neutral-500); --color-fg-disabled: var(--neutral-300);
+    --color-border: var(--neutral-200); --color-border-strong: var(--neutral-300);
+    --color-border-muted: var(--neutral-100); --color-focus-ring: var(--blue-500);
+    --radius-xs: 2px; --radius-sm: 4px; --radius-md: 8px;
+    --radius-lg: 12px; --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 9999px;
+    --shadow-xs: 0 1px 2px rgba(23,26,28,0.04);
+    --shadow-sm: 0 1px 3px rgba(23,26,28,0.06), 0 1px 2px rgba(23,26,28,0.04);
+    --shadow-md: 0 4px 12px rgba(23,26,28,0.08), 0 2px 4px rgba(23,26,28,0.04);
+    --shadow-lg: 0 12px 32px rgba(23,26,28,0.12), 0 4px 8px rgba(23,26,28,0.06);
+    --shadow-xl: 0 24px 48px rgba(23,26,28,0.16);
+    --font-sans: "Superbet Sans", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Rubik", "Manrope", system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--neutral-50); }
+  body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  #root { height: 100%; }
+  @keyframes tx-spin { to { transform: rotate(360deg); } }
+  .tx-spin { animation: tx-spin .7s linear infinite; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+/* ============================================================
+   PALETTE & STATUS TOKENS
+   ============================================================ */
+const ADMIN = {
+  blue:      '#0d3df0',
+  blueDeep:  '#0a31bd',
+  blueSoft:  '#eaf0ff',
+  blueText:  '#1452ff',
+};
+
+const STATUS = {
+  Approved:    { fg: 'var(--green-700)',  bg: 'var(--green-50)',   dot: 'var(--green-500)',  bd: '#bce6cb' },
+  Paid:        { fg: 'var(--green-700)',  bg: 'var(--green-50)',   dot: 'var(--green-500)',  bd: '#bce6cb' },
+  Declined:    { fg: 'var(--red-700)',    bg: 'var(--red-50)',     dot: 'var(--red-600)',    bd: '#f6c9c9' },
+  Pending:     { fg: 'var(--orange-700)', bg: 'var(--orange-50)',  dot: 'var(--orange-500)', bd: '#ffd9a6' },
+  Initialised: { fg: 'var(--neutral-700)',bg: 'var(--neutral-100)',dot: 'var(--neutral-500)',bd: 'var(--neutral-300)' },
+  Cancelled:   { fg: 'var(--neutral-700)',bg: 'var(--neutral-100)',dot: 'var(--neutral-500)',bd: 'var(--neutral-300)' },
+  Refunded:    { fg: 'var(--magenta-700)',bg: 'var(--magenta-50)', dot: 'var(--magenta-700)',bd: '#ffbfdc' },
+  Reversed:    { fg: 'var(--magenta-700)',bg: 'var(--magenta-50)', dot: 'var(--magenta-700)',bd: '#ffbfdc' },
+  'Sent to PSP': { fg: 'var(--blue-700)', bg: 'var(--blue-50)',   dot: 'var(--blue-500)',   bd: '#b8dafc', isNew: true },
+};
+
+/* ============================================================
+   ICONS — inline SVG, 24×24 grid, 2px stroke, rounded
+   ============================================================ */
+const PATHS = {
+  sync:    'M3 9a8 8 0 0 1 13.5-4.5L20 8M21 5v3h-3M21 15a8 8 0 0 1-13.5 4.5L4 16M3 19v-3h3',
+  refund:  'M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5H8',
+  reverse: 'M3 12h13a4 4 0 0 0 0-8h-1M3 12l4-4M3 12l4 4',
+  copy:    'M9 9h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1ZM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1',
+  check:   'M5 12.5l4.5 4.5L19 7',
+  close:   'M6 6l12 12M18 6L6 18',
+  alert:   'M12 4l9 16H3L12 4ZM12 10v4M12 17.5v.5',
+  info:    'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 11v5M12 8v.5',
+  clock:   'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3.5 2',
+  chevR:   'M9 5l7 7-7 7',
+  chevD:   'M5 9l7 7 7-7',
+  ext:     'M14 5h5v5M19 5l-8 8M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6',
+  shield:  'M12 3l8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z',
+  user:    'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 20a7.5 7.5 0 0 1 15 0',
+  search:  'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20 20l-4-4',
+  filter:  'M3 5h18l-7 8v6l-4 2v-8L3 5Z',
+  dots:    'M5 12h.01M12 12h.01M19 12h.01',
+  send:    'M5 12h14M13 6l6 6-6 6',
+  retry:   'M4 12a8 8 0 1 1 2.3 5.6M4 20v-4h4',
+  arrowDn: 'M12 4v14M6 12l6 6 6-6',
+  bolt:    'M13 3L4 14h7l-1 7 9-11h-7l1-7Z',
+  bank:    'M4 10h16M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18M12 3l8 5H4l8-5Z',
+  card:    'M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7ZM3 10h18',
+  flag:    'M5 21V4M5 4h12l-2 4 2 4H5',
+  link:    'M9 15l6-6M10 6l1-1a4 4 0 0 1 6 6l-1 1M14 18l-1 1a4 4 0 0 1-6-6l1-1',
+  doc:     'M7 3h7l4 4v14H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1ZM13 3v5h5',
+  trash:   'M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M7 7l.8 12a1 1 0 0 0 1 1h6.4a1 1 0 0 0 1-1L18 7',
+  ban:     'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM6 6l12 12',
+};
+
+function Icon({ name, size = 16, sw = 2, style, className }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round"
+      className={className} style={{ flexShrink: 0, display: 'block', ...style }}>
+      <path d={PATHS[name]} />
+    </svg>
+  );
+}
+
+/* ============================================================
+   PRIMITIVES
+   ============================================================ */
+function StatusPill({ status, size = 'md' }) {
+  const s = STATUS[status] || STATUS.Initialised;
+  const pad = size === 'sm' ? '2px 8px' : '3px 10px 3px 8px';
+  const fs = size === 'sm' ? 11 : 12;
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6, padding: pad,
+      borderRadius: 'var(--radius-full)', background: s.bg, color: s.fg,
+      border: `1px solid ${s.bd}`, fontSize: fs, fontWeight: 700,
+      lineHeight: 1.3, whiteSpace: 'nowrap', letterSpacing: 0.1,
+    }}>
+      <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.dot, flexShrink: 0 }} />
+      {status}
+    </span>
+  );
+}
+
+function Chip({ children, icon, tone = 'neutral' }) {
+  const tones = {
+    neutral: { bg: 'var(--neutral-100)', fg: 'var(--neutral-800)', bd: 'var(--neutral-200)' },
+    soft:    { bg: 'var(--neutral-50)',  fg: 'var(--neutral-700)', bd: 'var(--neutral-200)' },
+  };
+  const t = tones[tone] || tones.neutral;
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 5, padding: '2px 8px',
+      borderRadius: 'var(--radius-sm)', background: t.bg, color: t.fg,
+      border: `1px solid ${t.bd}`, fontSize: 12, fontWeight: 600, lineHeight: 1.4,
+      fontFamily: 'var(--font-body)',
+    }}>
+      {icon && <Icon name={icon} size={12} sw={2.2} />}{children}
+    </span>
+  );
+}
+
+function KV({ label, children, mono, copy, accent }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>
+      <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase', color: 'var(--neutral-500)' }}>{label}</span>
+      <span style={{
+        fontSize: 13, fontWeight: 600, color: accent || 'var(--neutral-900)',
+        fontFamily: mono ? 'var(--font-mono)' : 'var(--font-body)',
+        display: 'flex', alignItems: 'center', gap: 6, minWidth: 0,
+      }}>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{children}</span>
+        {copy && <Icon name="copy" size={12} style={{ color: 'var(--neutral-400)', flexShrink: 0, cursor: 'pointer' }} />}
+      </span>
+    </div>
+  );
+}
+
+function Btn({ children, icon, iconColor, variant = 'default', size = 'md', onClick, disabled, title, full, busy }) {
+  const h = size === 'lg' ? 40 : size === 'sm' ? 30 : 34;
+  const variants = {
+    primary: { bg: ADMIN.blue, fg: '#fff', bd: ADMIN.blue, hov: ADMIN.blueDeep },
+    success: { bg: 'var(--green-500)', fg: '#fff', bd: 'var(--green-500)', hov: 'var(--green-600)' },
+    danger:  { bg: 'var(--color-danger)', fg: '#fff', bd: 'var(--color-danger)', hov: 'var(--red-700)' },
+    default: { bg: '#fff', fg: 'var(--neutral-800)', bd: 'var(--neutral-300)', hov: 'var(--neutral-50)' },
+    ghost:   { bg: 'transparent', fg: 'var(--neutral-700)', bd: 'transparent', hov: 'var(--neutral-100)' },
+  };
+  const v = variants[variant] || variants.default;
+  const [hov, setHov] = React.useState(false);
+  return (
+    <button onClick={disabled ? undefined : onClick} title={title} disabled={disabled}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        height: h, padding: size === 'sm' ? '0 10px' : '0 14px', width: full ? '100%' : 'auto',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+        background: disabled ? 'var(--neutral-100)' : (hov ? v.hov : v.bg),
+        color: disabled ? 'var(--neutral-400)' : v.fg,
+        border: `1px solid ${disabled ? 'var(--neutral-200)' : v.bd}`,
+        borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-sans)',
+        fontSize: 13, fontWeight: 700, letterSpacing: 0.1,
+        cursor: disabled ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap',
+        transition: 'background .14s, border-color .14s', flexShrink: 0,
+      }}>
+      {busy
+        ? <span className="tx-spin" style={{ width: 14, height: 14, border: '2px solid currentColor', borderTopColor: 'transparent', borderRadius: '50%', display: 'inline-block' }} />
+        : icon && <Icon name={icon} size={15} sw={2.1} style={iconColor && !disabled ? { color: iconColor } : undefined} />}
+      {children}
+    </button>
+  );
+}
+
+/* ============================================================
+   TRANSACTION DATA
+   ============================================================ */
+const TX = {
+  id: 'a48f2325-ff59-4229-b65e-c05701efe38f',
+  idShort: 'a48f2325…efe38f',
+  status: 'Approved',
+  type: 'Deposit',
+  method: 'PIX',
+  source: 'OKTO',
+  amount: '120.00',
+  currency: 'BRL',
+  domain: '.BR',
+  country: 'BR',
+  created: '29/04/2026 14:05:55',
+  updated: '29/04/2026 14:06:27',
+  playerId: '33025761',
+  playerName: 'HENRIQUE NUNES DE SOUZA',
+  extId: '019dd8ea-bc85-7026-970e-2258c015fafc',
+  paymentId: 'a48f2325-ff59-4229-b65e-c05701efe38f',
+  details: '46753436863',
+  seon: { state: 'APPROVE', score: 18, rules: ['Email is not similar to user full name', 'Device seen on 3 other accounts'] },
+};
+
+const DECLINE = {
+  DECLINE_NSF: {
+    label: 'Insufficient funds',
+    desc: "The player's funding account did not have enough balance to complete the deposit.",
+    advice: 'Ask the player to top up their bank balance and retry. No action needed on the platform.',
+    cat: 'Player funds',
+  },
+  DECLINE_LIMIT: {
+    label: 'Deposit limit breach',
+    desc: "The deposit was accepted by the PSP and funds settled, but it exceeded the player's active daily deposit limit. An automatic refund was triggered.",
+    advice: "Review the player's limit configuration. Confirm the automatic refund was received. No further action needed unless the player disputes.",
+    cat: 'Compliance / Limits',
+  },
+};
+
+/* ============================================================
+   CHROME — blue admin header + Finance sidebar
+   ============================================================ */
+const NAV = ['Players', 'Multiplayer', 'CMS', 'Finance', 'Gaming', 'CRM', 'Risk & Fraud', 'KYC', 'Staff Audit', 'Exp Platform', 'System', 'API Documentation'];
+
+function AdminHeader() {
+  return (
+    <div style={{ background: ADMIN.blue, color: '#fff', height: 50, display: 'flex', alignItems: 'stretch', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '0 22px', fontWeight: 800, fontSize: 21, letterSpacing: -0.5, fontStyle: 'italic' }}>SUPER</div>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, paddingLeft: 18, overflow: 'hidden' }}>
+        {NAV.map((n) => {
+          const active = n === 'Finance';
+          return (
+            <span key={n} style={{
+              fontSize: 12.5, fontWeight: active ? 700 : 500, padding: '0 9px', height: '100%',
+              display: 'flex', alignItems: 'center', color: active ? '#fff' : 'rgba(255,255,255,.78)',
+              borderBottom: active ? '2px solid #fff' : '2px solid transparent', whiteSpace: 'nowrap',
+            }}>{n}</span>
+          );
+        })}
+      </nav>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+        <div style={{ background: ADMIN.blueDeep, height: '100%', display: 'flex', alignItems: 'center', gap: 7, padding: '0 14px', fontSize: 12.5, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+          <Icon name="clock" size={14} />13:20
+        </div>
+        <div style={{ background: ADMIN.blueDeep, height: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px 0 14px', fontSize: 12.5, fontWeight: 600, borderLeft: '1px solid rgba(255,255,255,.12)' }}>
+          <Icon name="user" size={14} />Radu Florea
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SIDE = [
+  { label: 'Platform Transactions', icon: 'bank', active: true },
+  { label: 'Stuck Payments', icon: 'alert' },
+  { label: 'Auto Payments', icon: 'sync' },
+  { label: 'SSBT Management', icon: 'doc' },
+  { label: 'Payments Routing', icon: 'reverse' },
+  { label: 'IBAN Whitelisting Queue', icon: 'shield' },
+];
+
+function FinanceSidebar() {
+  return (
+    <aside style={{ width: 232, flexShrink: 0, padding: 14 }}>
+      <div style={{ background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-md)', padding: 8 }}>
+        <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--neutral-500)', padding: '8px 10px 6px' }}>Finance</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {SIDE.map((s) => (
+            <div key={s.label} style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
+              borderRadius: 'var(--radius-sm)', fontSize: 13,
+              fontWeight: s.active ? 700 : 500,
+              color: s.active ? ADMIN.blueText : 'var(--neutral-800)',
+              background: s.active ? ADMIN.blueSoft : 'transparent', cursor: 'pointer',
+            }}>
+              <Icon name={s.icon} size={16} sw={1.9} style={{ color: s.active ? ADMIN.blueText : 'var(--neutral-500)' }} />
+              {s.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function Card({ title, icon, right, children, pad = 16, style }) {
+  return (
+    <section style={{ background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-md)', overflow: 'hidden', ...style }}>
+      {title && (
+        <header style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '12px 16px', borderBottom: '1px solid var(--neutral-100)' }}>
+          {icon && <Icon name={icon} size={16} sw={2} style={{ color: 'var(--neutral-500)' }} />}
+          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--neutral-900)', letterSpacing: 0.1 }}>{title}</h3>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>{right}</div>
+        </header>
+      )}
+      <div style={{ padding: pad }}>{children}</div>
+    </section>
+  );
+}
+
+/* ============================================================
+   FEATURES — Consistency Check, modals, decline reason
+   ============================================================ */
+function ConsistencyCheck({ layout = 'row', onOpenModal }) {
+  const [state, setState] = React.useState('idle');
+  const run = () => {
+    setState('busy');
+    setTimeout(() => { if (onOpenModal) { setState('idle'); onOpenModal(); } else setState('done'); }, 1100);
+  };
+
+  if (layout === 'button') {
+    return (
+      <Btn icon="sync" busy={state === 'busy'} size="sm" onClick={run}>
+        {state === 'busy' ? 'Querying OKTO…' : 'Consistency Check'}
+      </Btn>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Btn icon="sync" busy={state === 'busy'} size="sm" onClick={run}>
+          {state === 'busy' ? 'Querying OKTO…' : 'Check status with PSP'}
+        </Btn>
+        <span style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>Last checked 4 min ago</span>
+      </div>
+      {state === 'done' && (
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px', background: 'var(--green-50)', border: '1px solid #bce6cb', borderRadius: 'var(--radius-sm)' }}>
+          <Icon name="check" size={16} style={{ color: 'var(--green-600)', marginTop: 1 }} />
+          <div style={{ fontSize: 12.5, lineHeight: 1.5, color: 'var(--neutral-800)' }}>
+            <strong style={{ color: 'var(--green-700)' }}>Consistent.</strong> OKTO reports <strong>APPROVED</strong> — matches the platform status.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ConsistencyModal({ onClose }) {
+  const rows = [
+    { field: 'State',       ours: 'Approved',               psp: 'APPROVED',                match: true },
+    { field: 'Amount',      ours: `${TX.currency} ${TX.amount}`, psp: `${TX.currency} ${TX.amount}`, match: true },
+    { field: 'Currency',    ours: TX.currency,              psp: TX.currency,               match: true },
+    { field: 'Updated at',  ours: TX.updated,               psp: '29/04/2026 14:06:27',     match: true },
+    { field: 'Provider ref',ours: TX.extId.slice(0,13)+'…', psp: TX.extId.slice(0,13)+'…', match: true, mono: true },
+  ];
+  const allMatch = rows.every((r) => r.match);
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(23,26,28,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: 540, maxWidth: '100%', background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden' }}>
+        <header style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 18px', borderBottom: '1px solid var(--neutral-100)' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 'var(--radius-sm)', background: 'var(--blue-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue-700)' }}><Icon name="sync" size={18} /></div>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Consistency check</h3>
+            <div style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>Platform record vs live OKTO response · checked just now</div>
+          </div>
+          <button onClick={onClose} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-500)', padding: 4 }}><Icon name="close" size={18} /></button>
+        </header>
+        <div style={{ padding: 18 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px', borderRadius: 'var(--radius-sm)', marginBottom: 14, background: allMatch ? 'var(--green-50)' : 'var(--red-50)', border: `1px solid ${allMatch ? '#bce6cb' : '#f6c9c9'}` }}>
+            <Icon name={allMatch ? 'check' : 'alert'} size={17} style={{ color: allMatch ? 'var(--green-600)' : 'var(--red-600)' }} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: allMatch ? 'var(--green-700)' : 'var(--red-700)' }}>{allMatch ? 'Consistent — all values match' : 'Mismatch detected'}</span>
+          </div>
+          <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1.2fr 44px', padding: '8px 14px', background: 'var(--neutral-50)', fontSize: 10.5, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--neutral-500)' }}>
+              <span>Field</span><span>Our system</span><span>OKTO (PSP)</span><span style={{ textAlign: 'center' }}>=</span>
+            </div>
+            {rows.map((r) => (
+              <div key={r.field} style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1.2fr 44px', alignItems: 'center', padding: '9px 14px', borderTop: '1px solid var(--neutral-100)' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{r.field}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--neutral-900)', fontFamily: r.mono ? 'var(--font-mono)' : 'var(--font-body)' }}>{r.ours}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--neutral-900)', fontFamily: r.mono ? 'var(--font-mono)' : 'var(--font-body)' }}>{r.psp}</span>
+                <span style={{ display: 'flex', justifyContent: 'center' }}>
+                  <span style={{ width: 18, height: 18, borderRadius: '50%', background: r.match ? 'var(--green-50)' : 'var(--red-50)', color: r.match ? 'var(--green-600)' : 'var(--red-600)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name={r.match ? 'check' : 'close'} size={12} sw={3} />
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 16 }}>
+            <span style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>OKTO reference <span style={{ fontFamily: 'var(--font-mono)' }}>019dd8ea…</span></span>
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+              <Btn variant="ghost" icon="sync" onClick={onClose}>Re-check</Btn>
+              <Btn variant="primary" onClick={onClose}>Close</Btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConsistencyModalMismatch({ onClose }) {
+  const rows = [
+    { field: 'State',        ours: 'Sent to PSP',  psp: 'PAID',          match: false },
+    { field: 'Amount',       ours: 'BRL 250.00',   psp: 'BRL 250.00',    match: true  },
+    { field: 'Currency',     ours: 'BRL',          psp: 'BRL',           match: true  },
+    { field: 'Updated at',   ours: '11:32:15',     psp: '11:32:18',      match: false },
+    { field: 'Provider ref', ours: 'req_9c2f1a44', psp: 'req_9c2f1a44',  match: true, mono: true },
+  ];
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(23,26,28,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: 540, maxWidth: '100%', background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden' }}>
+        <header style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 18px', borderBottom: '1px solid var(--neutral-100)' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 'var(--radius-sm)', background: 'var(--red-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--red-700)' }}><Icon name="sync" size={18} /></div>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Consistency check</h3>
+            <div style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>Platform record vs live OKTO response · checked just now</div>
+          </div>
+          <button onClick={onClose} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-500)', padding: 4 }}><Icon name="close" size={18} /></button>
+        </header>
+        <div style={{ padding: 18 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px', borderRadius: 'var(--radius-sm)', marginBottom: 14, background: 'var(--red-50)', border: '1px solid #f6c9c9' }}>
+            <Icon name="alert" size={17} style={{ color: 'var(--red-600)' }} />
+            <div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--red-700)' }}>Mismatch detected</span>
+              <span style={{ fontSize: 12, color: 'var(--red-700)', marginLeft: 8 }}>OKTO reports PAID — platform still shows Sent to PSP</span>
+            </div>
+          </div>
+          <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1.2fr 44px', padding: '8px 14px', background: 'var(--neutral-50)', fontSize: 10.5, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--neutral-500)' }}>
+              <span>Field</span><span>Our system</span><span>OKTO (PSP)</span><span style={{ textAlign: 'center' }}>=</span>
+            </div>
+            {rows.map((r) => (
+              <div key={r.field} style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1.2fr 44px', alignItems: 'center', padding: '9px 14px', borderTop: '1px solid var(--neutral-100)', background: r.match ? 'transparent' : 'var(--red-50)' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{r.field}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: r.match ? 'var(--neutral-900)' : 'var(--red-700)', fontFamily: r.mono ? 'var(--font-mono)' : 'var(--font-body)' }}>{r.ours}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: r.match ? 'var(--neutral-900)' : 'var(--green-700)', fontFamily: r.mono ? 'var(--font-mono)' : 'var(--font-body)' }}>{r.psp}</span>
+                <span style={{ display: 'flex', justifyContent: 'center' }}>
+                  <span style={{ width: 18, height: 18, borderRadius: '50%', background: r.match ? 'var(--green-50)' : 'var(--red-50)', color: r.match ? 'var(--green-600)' : 'var(--red-600)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: r.match ? '1px solid #bce6cb' : '1px solid #f6c9c9' }}>
+                    <Icon name={r.match ? 'check' : 'close'} size={12} sw={3} />
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginTop: 14, padding: '10px 12px', background: 'var(--orange-50)', border: '1px solid #ffd9a6', borderRadius: 'var(--radius-sm)' }}>
+            <Icon name="alert" size={14} style={{ color: 'var(--orange-700)', flexShrink: 0, marginTop: 1 }} />
+            <span style={{ fontSize: 12, color: 'var(--neutral-800)', lineHeight: 1.5 }}>The PSP processed this withdrawal but the platform did not receive a callback. Manual reconciliation or a force-update may be needed.</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 16 }}>
+            <Btn variant="ghost" icon="sync" onClick={onClose}>Re-check</Btn>
+            <Btn variant="primary" onClick={onClose}>Close</Btn>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ManualDeclineModal({ onClose, onConfirm }) {
+  const REASONS = [
+    'Suspicious activity detected',
+    'KYC verification required',
+    'Exceeds allowed threshold',
+    'Duplicate transaction suspected',
+    'Player account under review',
+    'Other',
+  ];
+  const [selected, setSelected] = React.useState(REASONS[0]);
+  const [other, setOther]       = React.useState('');
+  const [step, setStep]         = React.useState('form');
+
+  const reason = selected === 'Other' ? (other.trim() || 'Other') : selected;
+
+  if (step === 'done') {
+    return (
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(23,26,28,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+        <div onClick={(e) => e.stopPropagation()} style={{ width: 480, background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden' }}>
+          <div style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--red-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--red-600)' }}><Icon name="ban" size={22} /></div>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Payment declined</h3>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--neutral-600)', textAlign: 'center' }}>The payment was declined by <strong>Radu Florea</strong>.<br />Reason: <em>{reason}</em></p>
+            <Btn variant="primary" onClick={onClose} style={{ marginTop: 8 }}>Done</Btn>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(23,26,28,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: 480, background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden' }}>
+        <header style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 18px', borderBottom: '1px solid var(--neutral-100)' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 'var(--radius-sm)', background: 'var(--red-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--red-700)' }}><Icon name="ban" size={18} /></div>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Decline payment</h3>
+            <div style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>Select a reason for declining this payment</div>
+          </div>
+          <button onClick={onClose} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-500)', padding: 4 }}><Icon name="close" size={18} /></button>
+        </header>
+        <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {REASONS.map((r) => (
+              <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: "1px solid " + (selected === r ? 'var(--blue-300)' : 'var(--neutral-200)'), background: selected === r ? 'var(--blue-50)' : '#fff', cursor: 'pointer', fontSize: 13 }}>
+                <input type="radio" name="decline-reason" value={r} checked={selected === r} onChange={() => setSelected(r)} style={{ accentColor: 'var(--blue-600)' }} />
+                {r}
+              </label>
+            ))}
+          </div>
+          {selected === 'Other' && (
+            <textarea
+              value={other}
+              onChange={(e) => setOther(e.target.value)}
+              placeholder="Describe the reason..."
+              rows={3}
+              style={{ width: '100%', boxSizing: 'border-box', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--neutral-300)', fontSize: 13, fontFamily: 'var(--font-body)', resize: 'vertical', outline: 'none' }}
+            />
+          )}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
+            <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+            <Btn variant="danger" icon="ban" onClick={() => { onConfirm(reason); setStep('done'); }}>Decline payment</Btn>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DeclineReason({ entry, compact }) {
+  const d = DECLINE[entry.code] || { label: entry.reason, desc: '', advice: '', cat: '' };
+  const [raw, setRaw] = React.useState(false);
+  return (
+    <div style={{ border: '1px solid #f6c9c9', background: 'var(--red-50)', borderRadius: 'var(--radius-sm)', padding: compact ? '10px 12px' : '12px 14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <Icon name="alert" size={15} style={{ color: 'var(--red-600)' }} />
+        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--red-700)' }}>{d.label}</span>
+        <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 0.4, color: 'var(--red-700)', background: '#fff', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-xs)', padding: '1px 6px', fontFamily: 'var(--font-mono)' }}>{entry.code}</span>
+        {d.cat && <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: 'var(--neutral-600)' }}>{d.cat}</span>}
+      </div>
+      {!compact && d.desc && <p style={{ margin: '8px 0 0', fontSize: 12.5, lineHeight: 1.5, color: 'var(--neutral-800)' }}>{d.desc}</p>}
+      {!compact && d.advice && (
+        <div style={{ margin: '8px 0 0', fontSize: 12, lineHeight: 1.5, color: 'var(--neutral-700)', display: 'flex', gap: 7 }}>
+          <Icon name="info" size={14} style={{ color: 'var(--blue-500)', marginTop: 1, flexShrink: 0 }} />
+          <span><strong>Next step:</strong> {d.advice}</span>
+        </div>
+      )}
+      <button onClick={() => setRaw(!raw)} style={{ marginTop: 8, background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--neutral-500)', fontFamily: 'var(--font-sans)' }}>
+        <Icon name="chevR" size={11} style={{ transform: raw ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }} />
+        Raw provider response
+      </button>
+      {raw && <div style={{ marginTop: 6, fontFamily: 'var(--font-mono)', fontSize: 11.5, color: 'var(--neutral-600)', background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-xs)', padding: '6px 8px' }}>{`{ "status": "rejected", "code": "${entry.raw}", "provider": "OKTO" }`}</div>}
+    </div>
+  );
+}
+
+function ActionModal({ mode, onClose, onConfirm }) {
+  const isReverse = mode === 'reverse';
+  const [step, setStep] = React.useState('form');
+  const [reason, setReason] = React.useState('Player request');
+  const [amount, setAmount] = React.useState(TX.amount);
+  const title = isReverse ? 'Reverse transaction' : 'Refund deposit';
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(23,26,28,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: 440, maxWidth: '100%', background: '#fff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden' }}>
+        <header style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 18px', borderBottom: '1px solid var(--neutral-100)' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 'var(--radius-sm)', background: isReverse ? 'var(--orange-50)' : 'var(--blue-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isReverse ? 'var(--orange-700)' : 'var(--blue-700)' }}>
+            <Icon name={isReverse ? 'reverse' : 'refund'} size={18} />
+          </div>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{title}</h3>
+          <button onClick={onClose} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-500)', padding: 4 }}><Icon name="close" size={18} /></button>
+        </header>
+        {step === 'form' ? (
+          <div style={{ padding: 18 }}>
+            <div style={{ display: 'flex', gap: 8, padding: '10px 12px', background: 'var(--neutral-50)', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-700)', lineHeight: 1.5 }}>
+              <Icon name="info" size={15} style={{ color: 'var(--blue-500)', flexShrink: 0, marginTop: 1 }} />
+              {isReverse
+                ? <span>Reversing returns funds to the player wallet and voids the transaction with OKTO. This cannot be undone.</span>
+                : <span>Refunds the captured amount back to the player's PIX account via OKTO. Player will be notified.</span>}
+            </div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--neutral-500)', marginBottom: 6 }}>Amount</label>
+            <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--neutral-300)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', marginBottom: 14 }}>
+              <span style={{ padding: '0 12px', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)', background: 'var(--neutral-50)', alignSelf: 'stretch', display: 'flex', alignItems: 'center', borderRight: '1px solid var(--neutral-200)' }}>{TX.currency}</span>
+              <input value={amount} onChange={(e) => setAmount(e.target.value)} style={{ flex: 1, border: 'none', outline: 'none', padding: '10px 12px', fontSize: 15, fontWeight: 600, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-body)' }} />
+            </div>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--neutral-500)', marginBottom: 6 }}>Reason</label>
+            <div style={{ position: 'relative', marginBottom: 18 }}>
+              <select value={reason} onChange={(e) => setReason(e.target.value)} style={{ width: '100%', appearance: 'none', border: '1px solid var(--neutral-300)', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', color: 'var(--neutral-800)', background: '#fff', cursor: 'pointer' }}>
+                <option>Player request</option>
+                <option>Duplicate deposit</option>
+                <option>Suspected fraud — risk hold</option>
+                <option>Goodwill / support gesture</option>
+                <option>Failed bonus attribution</option>
+              </select>
+              <Icon name="chevD" size={16} style={{ position: 'absolute', right: 12, top: 12, color: 'var(--neutral-500)', pointerEvents: 'none' }} />
+            </div>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+              <Btn variant={isReverse ? 'danger' : 'primary'} icon={isReverse ? 'reverse' : 'refund'} onClick={() => { onConfirm && onConfirm(mode, { amount, reason }); setStep('done'); }}>
+                {isReverse ? 'Confirm reverse' : `Refund ${TX.currency} ${amount}`}
+              </Btn>
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: '28px 18px 22px', textAlign: 'center' }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--green-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', color: 'var(--green-600)' }}>
+              <Icon name="check" size={26} />
+            </div>
+            <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700 }}>{isReverse ? 'Reversal submitted' : 'Refund submitted'}</h4>
+            <p style={{ margin: '0 0 18px', fontSize: 13, color: 'var(--neutral-600)', lineHeight: 1.5 }}>
+              {TX.currency} {amount} sent to OKTO. A <strong>{isReverse ? 'Reversed' : 'Refunded'}</strong> event was added to the lifecycle.
+            </p>
+            <Btn variant="primary" onClick={onClose} full>Done</Btn>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   LIFECYCLE DATA & TIMELINE PRIMITIVES
+   ============================================================ */
+const CHECKS2 = ['System & personal limits check', 'Deposit attempt fraud check', 'Deposit limit check'];
+
+const SENT2 = (req, att) => ({
+  desc: "Payment request dispatched to the provider over the PIX rail. Awaiting the provider's decision.",
+  info: [['Provider', 'OKTO'], ['Method', 'PIX'], ['Request ID', req], ['Routing rule', 'BR-PIX-primary'], ['Attempt', att]],
+});
+
+const SYS2 = {
+  desc: 'Internal risk and limit checks passed. The platform approved the payment and queued it to send to the PSP.',
+  info: [['Decision', 'Auto-approve'], ['Rules evaluated', '6'], ['Risk gate', 'Passed'], ['SEON score', '18 · low']],
+};
+
+const LIFE2 = [
+  { t: '14:06:27', status: 'Paid',        by: 'PSP',    actor: 'OKTO',         reason: 'Provider confirmed payment',       desc: 'OKTO confirmed and settled the payment. Funds credited to the player wallet.', info: [['Provider', 'OKTO'], ['Provider ref', '019dd8ea…fafc'], ['Settlement', 'Instant · PIX'], ['Latency', '4.8s']] },
+  { t: '14:06:22', status: 'Sent to PSP', by: 'System', actor: 'Orchestrator',  reason: 'Retry routed to OKTO (PIX)',        ...SENT2('req_2f9a7c41', '2 of 2') },
+  { t: '14:06:21', status: 'Approved',    by: 'System', actor: 'Risk engine',   reason: 'All internal checks passed',        system: true, ...SYS2 },
+  { t: '14:06:20', status: 'Pending',     by: 'System', actor: 'Orchestrator',  reason: 'Player re-initiated payment',       desc: 'Payment re-entered the orchestration queue after the player retried.', info: [['Trigger', 'Player re-initiated'], ['Queue', 'deposit-orchestration']] },
+  { t: '14:06:10', status: 'Declined',    by: 'PSP',    actor: 'OKTO',         reason: 'Insufficient funds',                code: 'DECLINE_NSF', raw: 'tx_rejected:51' },
+  { t: '14:05:58', status: 'Sent to PSP', by: 'System', actor: 'Orchestrator',  reason: 'Routed to OKTO (PIX)',              ...SENT2('req_2f9a6b08', '1 of 2') },
+  { t: '14:05:57', status: 'Approved',    by: 'System', actor: 'Risk engine',   reason: 'All internal checks passed',        system: true, ...SYS2 },
+  { t: '14:05:56', status: 'Pending',     by: 'System', actor: 'Orchestrator',  reason: 'Queued for internal approval',      desc: 'New deposit entered the orchestration queue.', info: [['Trigger', 'New deposit'], ['Queue', 'deposit-orchestration']] },
+  { t: '14:05:55', status: 'Initialised', by: 'Player', actor: 'Player app',    reason: 'Checks passed',                     checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+const LIFE2_PENDING = [
+  { t: '14:05:57', status: 'Approved',    by: 'System', actor: 'Risk engine',   reason: 'All internal checks passed',        system: true, ...SYS2 },
+  { t: '14:05:56', status: 'Pending',     by: 'System', actor: 'Orchestrator',  reason: 'Awaiting manual decision',          current: true, desc: 'Held for a manual decision by a payments agent.', info: [['Queue', 'manual-review'], ['SLA', '15 min']] },
+  { t: '14:05:55', status: 'Initialised', by: 'Player', actor: 'Player app',    reason: 'Checks passed',                     checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+/* ── Example 2 data ── */
+const TX2 = {
+  id: 'b92c3410-aa87-4f01-c72d-d18301fe55ab',
+  idShort: 'b92c3410...fe55ab',
+  status: 'Refunded',
+  type: 'Deposit',
+  method: 'PIX',
+  source: 'OKTO',
+  amount: '500.00',
+  currency: 'BRL',
+  domain: '.BR',
+  country: 'BR',
+  created: '02/05/2026 09:14:03',
+  updated: '02/05/2026 09:14:51',
+  playerId: '44112983',
+  playerName: 'CARLOS EDUARDO LIMA',
+  extId: '7fa3d91c-bc04-4e82-a931-99c108bc4d12',
+  paymentId: 'b92c3410-aa87-4f01-c72d-d18301fe55ab',
+  details: '09153421706',
+  seon: { state: 'APPROVE', score: 22, rules: ['Email verified', 'Device seen on 1 other account'] },
+};
+
+const LIFE_AUTO_REFUND = [
+  { t: '09:14:51', status: 'Refunded',    by: 'System', actor: 'Refund service', reason: 'Automatic refund — deposit limit breach', linked: 'b92c3410...RF1' },
+  { t: '09:14:50', status: 'Declined',    by: 'System', actor: 'Risk engine',    reason: 'Post-settlement limit breach detected',   code: 'DECLINE_LIMIT', raw: 'limit_exceeded:daily_deposit' },
+  { t: '09:14:10', status: 'Paid',        by: 'PSP',    actor: 'OKTO',           reason: 'Provider confirmed payment',              desc: 'OKTO confirmed and settled the payment. Post-settlement limit check triggered by the platform.', info: [['Provider', 'OKTO'], ['Provider ref', '7fa3d91c...bc04'], ['Settlement', 'Instant / PIX'], ['Latency', '3.1s']] },
+  { t: '09:14:08', status: 'Sent to PSP', by: 'System', actor: 'Orchestrator',   reason: 'Routed to OKTO (PIX)',                    desc: "Payment request dispatched to the provider over the PIX rail. Awaiting the provider's decision.", info: [['Provider', 'OKTO'], ['Method', 'PIX'], ['Request ID', 'req_4a1c8b22'], ['Routing rule', 'BR-PIX-primary'], ['Attempt', '1 of 1']] },
+  { t: '09:14:07', status: 'Approved',    by: 'System', actor: 'Risk engine',    reason: 'All internal checks passed',              system: true, desc: 'Internal risk and limit checks passed. The platform approved the payment and queued it to send to the PSP.', info: [['Decision', 'Auto-approve'], ['Rules evaluated', '6'], ['Risk gate', 'Passed'], ['SEON score', '22 / low']] },
+  { t: '09:14:05', status: 'Pending',     by: 'System', actor: 'Orchestrator',   reason: 'Queued for internal approval',            desc: 'New deposit entered the orchestration queue.', info: [['Trigger', 'New deposit'], ['Queue', 'deposit-orchestration']] },
+  { t: '09:14:03', status: 'Initialised', by: 'Player', actor: 'Player app',     reason: 'Checks passed',                          checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+/* ── Example 3 data ── */
+const TX3 = {
+  id: 'c74d1892-bc33-4a09-d51e-e29402ab77cd',
+  idShort: 'c74d1892...b77cd',
+  status: 'Sent to PSP',
+  type: 'Withdrawal',
+  method: 'PIX',
+  source: 'OKTO',
+  amount: '250.00',
+  currency: 'BRL',
+  domain: '.BR',
+  country: 'BR',
+  created: '03/05/2026 11:32:10',
+  updated: '03/05/2026 11:32:15',
+  playerId: '57219834',
+  playerName: 'MARINA COSTA FERREIRA',
+  extId: '3bc8a021-ff14-4d90-b83c-cc7712ea0045',
+  paymentId: 'c74d1892-bc33-4a09-d51e-e29402ab77cd',
+  details: '32198762104',
+  seon: { state: 'APPROVE', score: 14, rules: ['IP matches registration country', 'Known device'] },
+};
+
+const LIFE_STUCK_WITHDRAWAL = [
+  { t: '11:32:15', status: 'Sent to PSP', by: 'System', actor: 'Orchestrator', reason: 'Routed to OKTO (PIX) — awaiting callback', desc: 'Withdrawal dispatched to OKTO. No callback received yet — platform is waiting for PSP confirmation.', info: [['Provider', 'OKTO'], ['Method', 'PIX'], ['Request ID', 'req_9c2f1a44'], ['Routing rule', 'BR-PIX-primary'], ['Attempt', '1 of 1']] },
+  { t: '11:32:14', status: 'Approved',    by: 'System', actor: 'Risk engine',  reason: 'All internal checks passed', system: true, desc: 'Internal risk and limit checks passed. The platform approved the withdrawal and queued it to send to the PSP.', info: [['Decision', 'Auto-approve'], ['Rules evaluated', '6'], ['Risk gate', 'Passed'], ['SEON score', '14 / low']] },
+  { t: '11:32:11', status: 'Pending',     by: 'System', actor: 'Orchestrator', reason: 'Queued for internal approval', desc: 'New withdrawal entered the orchestration queue.', info: [['Trigger', 'New withdrawal'], ['Queue', 'withdrawal-orchestration']] },
+  { t: '11:32:10', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true, desc: 'Player requested the withdrawal. Pre-flight business checks ran at initiation.' },
+];
+
+/* ── Example 4 data ── */
+const TX4 = {
+  id: 'f91c3204-aa71-4e18-b60e-d72845fc1a9b',
+  idShort: 'f91c3204...1a9b',
+  status: 'Pending',
+  type: 'Deposit',
+  method: 'PIX',
+  source: 'OKTO',
+  amount: '199.00',
+  currency: 'BRL',
+  domain: '.BR',
+  country: 'BR',
+  created: '05/06/2026 09:58:01',
+  updated: '05/06/2026 09:58:03',
+  playerId: '28834501',
+  playerName: 'LUCAS ANDRADE SILVA',
+  extId: '7de1f903-3c2a-4b91-aa50-c8e102df7731',
+  paymentId: 'f91c3204-aa71-4e18-b60e-d72845fc1a9b',
+  details: '45678901234',
+  seon: { state: 'APPROVE', score: 18, rules: ['IP matches registration country', 'Known device', 'No prior chargebacks'] },
+};
+
+const LIFE_AP_AUTO = [
+  { t: '09:58:09', status: 'Paid',        by: 'PSP', actor: 'Autopayment', reason: 'Payment approved and funds settled', system: true, desc: 'Autopayment processed the payment end-to-end and funds were settled via PIX.', info: [['Processor', 'Autopayment'], ['Method', 'PIX'], ['Provider', 'OKTO'], ['Settlement', 'Instant']] },
+  { t: '09:58:07', status: 'Approved',    by: '' , actor: 'Autopayment', reason: 'Autopayment approved the deposit', system: true, desc: 'Autopayment evaluated all rules and approved the deposit without manual intervention.', info: [['Decision', 'Auto-approve'], ['Rules evaluated', '8'], ['Risk gate', 'Passed'], ['SEON score', '18 / low']] },
+  { t: '09:58:03', status: 'Pending',     by: 'System', actor: 'Autopayment', reason: 'Payment will be processed by Autopayment', desc: 'Deposit entered the Autopayment queue for automated processing.', info: [['Trigger', 'New deposit'], ['Queue', 'autopayment-deposit']] },
+  { t: '09:58:01', status: 'Initialised', by: 'Player', actor: 'Player app',  reason: 'Checks passed', checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+const LIFE_AP_MANUAL_BASE = [
+  { t: '09:58:03', status: 'Pending', by: 'System', actor: 'Autopayment', reason: 'Autopayment result was pending — payment needs manual review', current: true, desc: 'Autopayment could not make an automated decision. Payment is awaiting review by a payments agent.', info: [['Trigger', 'Autopayment escalation'], ['Queue', 'manual-review']] },
+  { t: '09:58:01', status: 'Initialised', by: 'Player', actor: 'Player app', reason: 'Checks passed', checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+const LIFE_AP_MANUAL_APPROVED = [
+  { t: '09:58:12', status: 'Paid',        by: 'System', actor: 'Orchestrator', reason: 'Payment approved and funds settled', system: true, desc: 'PSP confirmed payment settled after manual approval.', info: [['Method', 'PIX'], ['Provider', 'OKTO'], ['Settlement', 'Instant']] },
+  { t: '09:58:10', status: 'Approved',    by: 'Agent',  actor: 'Radu Florea',  reason: 'Manually approved by payments agent', desc: 'Payment manually approved by Radu Florea after Autopayment escalation.', info: [['Decision', 'Manual approve'], ['Agent', 'Radu Florea'], ['Team', 'Payments Ops']] },
+  { t: '09:58:03', status: 'Pending',     by: 'System', actor: 'Autopayment',  reason: 'Autopayment result was pending — payment needs manual review', desc: 'Autopayment could not make an automated decision. Payment was escalated to manual review.', info: [['Trigger', 'Autopayment escalation'], ['Queue', 'manual-review']] },
+  { t: '09:58:01', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+];
+
+/* ── Example 5 data — Declined reasons ── */
+const DECLINED_SCENARIOS = [
+  {
+    key: 'invalid-data',
+    label: 'Invalid data',
+    type: 'Withdrawal',
+    amount: '150.00',
+    currency: 'BRL',
+    playerId: '61037492',
+    playerName: 'FERNANDA XAVIER ROCHA',
+    details: '30192748650',
+    category: 'Invalid Payment Data',
+    statement: 'Account number invalid or does not exist.',
+    tldr: 'Withdrawal declined by OKTO — the destination PIX key was not found in the central directory. No funds left the platform.',
+    rawMsg: 'PBE326: Creditor account number invalid or missing',
+    advice: 'Verify the destination PIX key with the player. Ask them to update their withdrawal account details and retry.',
+  },
+  {
+    key: 'timeout',
+    label: 'Timeout',
+    type: 'Deposit',
+    amount: '300.00',
+    currency: 'BRL',
+    playerId: '73920154',
+    playerName: 'PAULO ROBERTO MENDES',
+    details: '92837461025',
+    category: 'Timeout / Expired',
+    statement: 'Payment session exceeded time limit and expired.',
+    tldr: 'Deposit expired before the player completed payment — the PIX session hit its time limit. No funds were captured or moved.',
+    rawMsg: '2022: Transaction expired',
+    advice: 'No funds were captured. Player can safely retry the deposit with a fresh PIX QR code or key.',
+  },
+  {
+    key: 'bank-decline',
+    label: 'Bank decline',
+    type: 'Withdrawal',
+    amount: '800.00',
+    currency: 'BRL',
+    playerId: '39501867',
+    playerName: 'RICARDO ALVES SOUZA',
+    details: '71829304756',
+    category: 'Bank Decline',
+    statement: 'Transaction stopped due to error at the receiving bank.',
+    tldr: 'Withdrawal sent to OKTO but rejected by the receiving bank (AB09). The transfer was initiated but the destination institution returned an error. No funds reached the player.',
+    rawMsg: '1000: Generic error. Refer to detailed error message; AB09-Pagamento rejeitado pelo PSP do recebedor',
+    advice: 'The receiving bank rejected the transfer. Player should contact their bank or retry with a different account.',
+  },
+  {
+    key: 'fraud-risk',
+    label: 'Fraud & risk',
+    type: 'Withdrawal',
+    amount: '450.00',
+    currency: 'BRL',
+    playerId: '82734601',
+    playerName: 'CAMILA FERREIRA SANTOS',
+    details: '58392017483',
+    category: 'Fraud & Risk',
+    statement: 'PIX transfers to salary accounts not permitted.',
+    tldr: 'Withdrawal blocked by OKTO — the destination is a salary account (conta salario), which cannot receive PIX transfers from this platform by regulation.',
+    rawMsg: '1000: Generic error. Refer to detailed error message; CH16-Nao e possivel enviar PIX para conta salario',
+    advice: 'Salary accounts cannot receive PIX transfers from this platform. Player must register a regular current account (conta corrente).',
+  },
+];
+
+function makeDeclinedLife(sc) {
+  const decNode = {
+    t: '10:15:08', status: 'Declined', by: 'PSP', actor: 'OKTO',
+    reason: sc.category + ': ' + sc.statement,
+    desc: 'OKTO returned a decline response. No funds were moved.',
+    info: [['Category', sc.category], ['Provider', 'OKTO'], ['Rail', 'PIX']],
+    _decSc: sc,
+  };
+  if (sc.type === 'Deposit') {
+    return [
+      decNode,
+      { t: '10:15:03', status: 'Pending',     by: 'System', actor: 'Orchestrator', reason: 'Queued for PSP submission',         desc: 'Deposit entered the orchestration queue.', info: [['Trigger', 'New deposit'], ['Queue', 'deposit-orchestration']] },
+      { t: '10:15:00', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true,       desc: 'Player started the deposit. Pre-flight checks ran at initiation.' },
+    ];
+  }
+  return [
+    decNode,
+    { t: '10:15:06', status: 'Sent to PSP', by: 'System', actor: 'Orchestrator', reason: 'Routed to OKTO (PIX) — response received',    desc: 'Withdrawal dispatched to OKTO. Decline response received.', info: [['Provider', 'OKTO'], ['Method', 'PIX'], ['Attempt', '1 of 1']] },
+    { t: '10:15:04', status: 'Approved',    by: 'System', actor: 'Risk engine',  reason: 'All internal checks passed', system: true,     desc: 'Platform approved the withdrawal internally.', info: [['Decision', 'Auto-approve'], ['Risk gate', 'Passed']] },
+    { t: '10:15:02', status: 'Pending',     by: 'System', actor: 'Orchestrator', reason: 'Queued for internal approval',                  desc: 'Withdrawal entered the orchestration queue.', info: [['Trigger', 'New withdrawal'], ['Queue', 'withdrawal-orchestration']] },
+    { t: '10:15:00', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true,                  desc: 'Player requested the withdrawal. Pre-flight checks ran at initiation.' },
+  ];
+}
+
+function DeclineBanner({ sc }) {
+  const [showRaw, setShowRaw] = React.useState(false);
+  return (
+    <div style={{ background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-sm)', padding: '12px 14px', marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
+        <Icon name="ban" size={16} style={{ color: 'var(--red-600)', flexShrink: 0, marginTop: 2 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 5 }}>
+            <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--red-700)', background: '#fff', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-xs)', padding: '1px 7px', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>{sc.category}</span>
+            <span style={{ fontSize: 13, color: 'var(--neutral-800)', lineHeight: 1.4 }}>{sc.statement}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 6, fontSize: 12, color: 'var(--neutral-700)', lineHeight: 1.5 }}>
+            <Icon name="info" size={13} style={{ color: 'var(--blue-500)', flexShrink: 0, marginTop: 2 }} />
+            <span><strong>Suggested action:</strong> {sc.advice}</span>
+          </div>
+          <button onClick={() => setShowRaw(function(r) { return !r; })} style={{ marginTop: 8, background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--neutral-500)', fontFamily: 'var(--font-sans)' }}>
+            <Icon name="chevR" size={11} style={{ transform: showRaw ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }} />
+            Raw provider message
+          </button>
+          {showRaw && (
+            <div style={{ marginTop: 5, fontFamily: 'var(--font-mono)', fontSize: 11.5, color: 'var(--neutral-600)', background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-xs)', padding: '6px 10px', wordBreak: 'break-all', lineHeight: 1.5 }}>{sc.rawMsg}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChecksList() {
+  return (
+    <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+      <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase', color: 'var(--neutral-500)', padding: '7px 12px', background: 'var(--neutral-50)' }}>Business check</div>
+      {CHECKS2.map((it) => (
+        <div key={it} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px', borderTop: '1px solid var(--neutral-100)', fontSize: 12.5, color: 'var(--neutral-800)' }}>
+          <span style={{ width: 16, height: 16, borderRadius: '50%', background: 'var(--green-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--green-600)', flexShrink: 0 }}><Icon name="check" size={11} sw={3} /></span>
+          {it}<span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 700, color: 'var(--green-600)' }}>Passed</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function InfoRows({ desc, rows }) {
+  return (
+    <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+      {desc && <div style={{ padding: '9px 12px', fontSize: 12.5, lineHeight: 1.5, color: 'var(--neutral-700)' }}>{desc}</div>}
+      {rows && rows.map(([k, v]) => (
+        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '7px 12px', borderTop: '1px solid var(--neutral-100)', fontSize: 12 }}>
+          <span style={{ color: 'var(--neutral-500)', fontWeight: 600, flexShrink: 0 }}>{k}</span>
+          <span style={{ color: 'var(--neutral-900)', fontWeight: 600, fontFamily: /ref|id|req/i.test(k) ? 'var(--font-mono)' : 'var(--font-body)', textAlign: 'right' }}>{v}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function actorLabel(e) { return e.by === 'System' ? 'System' : `${e.by} · ${e.actor}`; }
+function actorIcon(e)  { return (e.by === 'Player' || e.by === 'Agent') ? 'user' : e.by === 'PSP' ? 'bank' : 'sync'; }
+
+function DeclineBannerInline({ sc }) {
+  const [showRaw, setShowRaw] = React.useState(false);
+  return (
+    <div style={{ border: '1px solid #f6c9c9', background: 'var(--red-50)', borderRadius: 'var(--radius-sm)', padding: '10px 12px' }}>
+      <div style={{ display: 'flex', gap: 6, fontSize: 12, color: 'var(--neutral-700)', lineHeight: 1.5 }}>
+        <Icon name="info" size={13} style={{ color: 'var(--blue-500)', flexShrink: 0, marginTop: 2 }} />
+        <span><strong>Suggested action:</strong> {sc.advice}</span>
+      </div>
+      <button onClick={() => setShowRaw(function(r) { return !r; })} style={{ marginTop: 8, background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--neutral-500)', fontFamily: 'var(--font-sans)' }}>
+        <Icon name="chevR" size={11} style={{ transform: showRaw ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }} />
+        Raw provider message
+      </button>
+      {showRaw && (
+        <div style={{ marginTop: 5, fontFamily: 'var(--font-mono)', fontSize: 11.5, color: 'var(--neutral-600)', background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-xs)', padding: '6px 10px', wordBreak: 'break-all', lineHeight: 1.5 }}>{sc.rawMsg}</div>
+      )}
+    </div>
+  );
+}
+
+function TimelineNode2({ e, last, actions }) {
+  const declined = e.status === 'Declined' && e.code;
+  const hasDecSc  = !!e._decSc;
+  const checks = e.checks;
+  const [open, setOpen] = React.useState(!!(declined || hasDecSc));
+  const s = STATUS[e.status] || STATUS.Initialised;
+  const isNew = e.status === 'Sent to PSP' || e.system;
+  const linked = !!e.linked;
+  const hasDetail = declined || checks || hasDecSc;
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '18px 1fr', gap: 14, position: 'relative' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <span style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', border: `3px solid ${s.dot}`, marginTop: 3, flexShrink: 0, zIndex: 1 }} />
+        {!last && <span style={{ flex: 1, width: 2, background: 'var(--neutral-200)', marginTop: 2 }} />}
+      </div>
+      <div style={{ paddingBottom: last ? 0 : 16, minWidth: 0 }}>
+        <div onClick={hasDetail ? () => setOpen(!open) : undefined}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', cursor: hasDetail ? 'pointer' : 'default' }}>
+          <StatusPill status={e.status} size="sm" />
+          {isNew && <span title="New lifecycle state" style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: 0.5, color: 'var(--blue-700)', background: 'var(--blue-50)', border: '1px solid #b8dafc', borderRadius: 2, padding: '1px 4px' }}>NEW</span>}
+          {linked && <span style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: 0.5, color: 'var(--magenta-700)', background: 'var(--magenta-50)', border: '1px solid #ffbfdc', borderRadius: 2, padding: '1px 4px' }}>LINKED</span>}
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--neutral-700)', fontVariantNumeric: 'tabular-nums' }}>{e.t}</span>
+          <span style={{ marginLeft: 'auto', fontSize: 11.5, color: 'var(--neutral-500)', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <Icon name={actorIcon(e)} size={12} />{actorLabel(e)}
+            {hasDetail && <Icon name="chevD" size={13} style={{ marginLeft: 4, color: 'var(--neutral-400)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .15s' }} />}
+          </span>
+        </div>
+
+        {hasDecSc ? (
+          <p style={{ margin: '5px 0 0', fontSize: 12.5, lineHeight: 1.45, display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
+            <Icon name="alert" size={14} style={{ color: 'var(--red-600)', flexShrink: 0 }} />
+            <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.4, color: 'var(--red-700)', background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 2, padding: '1px 5px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>{e._decSc.category}</span>
+            <span style={{ color: 'var(--neutral-700)' }}>{e._decSc.statement}</span>
+          </p>
+        ) : declined ? (!open && (
+          <p style={{ margin: '5px 0 0', fontSize: 12.5, lineHeight: 1.45, display: 'flex', alignItems: 'center', gap: 7 }}>
+            <Icon name="alert" size={14} style={{ color: 'var(--red-600)', flexShrink: 0 }} />
+            <strong style={{ color: 'var(--red-700)' }}>{DECLINE[e.code].label}</strong>
+            <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.4, color: 'var(--red-700)', background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 2, padding: '1px 5px', fontFamily: 'var(--font-mono)' }}>{e.code}</span>
+          </p>
+        )) : e.reason ? (
+          <p style={{ margin: '5px 0 0', fontSize: 12.5, color: linked ? 'var(--magenta-700)' : 'var(--neutral-600)', lineHeight: 1.45, display: 'flex', alignItems: 'center', gap: 6 }}>
+            {linked && <Icon name="link" size={13} style={{ flexShrink: 0 }} />}{e.reason}
+          </p>
+        ) : null}
+
+        {open && hasDetail && (
+          <div style={{ marginTop: 8 }}>
+            {hasDecSc
+              ? <DeclineBannerInline sc={e._decSc} />
+              : declined
+                ? <DeclineReason entry={e} />
+                : <><InfoRows desc={e.desc} /><div style={{ marginTop: 8 }}><ChecksList /></div></>}
+          </div>
+        )}
+
+        {actions && <div style={{ marginTop: 10 }}>{actions}</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   DIRECTION D — Inline Actions
+   No action buttons at the top; each lifecycle state carries
+   the actions relevant at that point.
+   ============================================================ */
+function Segmented({ value, onChange, options }) {
+  return (
+    <div style={{ display: 'inline-flex', background: 'var(--neutral-100)', borderRadius: 'var(--radius-sm)', padding: 2, gap: 2 }}>
+      {options.map((o) => {
+        const v = (o && typeof o === 'object') ? o.value : o;
+        const label = (o && typeof o === 'object') ? o.label : o;
+        return (
+          <button key={v} onClick={() => onChange(v)} style={{
+            border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 3,
+            fontFamily: 'var(--font-sans)', fontSize: 11.5, fontWeight: 700, textTransform: 'capitalize',
+            background: value === v ? '#fff' : 'transparent',
+            color: value === v ? 'var(--neutral-900)' : 'var(--neutral-500)',
+            boxShadow: value === v ? 'var(--shadow-xs)' : 'none',
+          }}>{label}</button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActionTray({ children, tone = 'neutral' }) {
+  const bg = tone === 'warn' ? 'var(--orange-50)' : 'var(--neutral-50)';
+  const bd = tone === 'warn' ? '#ffd9a6' : 'var(--neutral-200)';
+  return (
+    <div style={{ background: bg, border: `1px solid ${bd}`, borderRadius: 'var(--radius-sm)', padding: '10px 12px' }}>
+      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase', color: 'var(--neutral-500)', marginBottom: 8 }}>Available actions</div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>{children}</div>
+    </div>
+  );
+}
+
+function DirectionD({ onBack, exampleId = 'pix-approved-retry' }) {
+  const isAutoRefund = exampleId === 'auto-refund-limit';
+  const isStuck      = exampleId === 'stuck-withdrawal';
+  const isApManual   = exampleId === 'autopayment-manual';
+  const isDeclined   = exampleId === 'declined-reasons';
+
+  const [scenario, setScenario]               = React.useState('approved');
+  const [modal, setModal]                     = React.useState(null);
+  const [cc, setCc]                           = React.useState(false);
+  const [linked, setLinked]                   = React.useState([]);
+  const [toast, setToast]                     = React.useState(null);
+  const [apScenario, setApScenario]           = React.useState('autopayment');
+  const [apAction, setApAction]               = React.useState(null);
+  const [apDeclineReason, setApDeclineReason] = React.useState('');
+  const [declineModal, setDeclineModal]       = React.useState(false);
+  const [declinedKey, setDeclinedKey]         = React.useState('invalid-data');
+
+  const decSc = isDeclined ? (DECLINED_SCENARIOS.find(function(s) { return s.key === declinedKey; }) || DECLINED_SCENARIOS[0]) : null;
+  const txData = isStuck ? TX3 : isAutoRefund ? TX2 : isApManual ? TX4 : isDeclined ? {
+    id: 'e8c72914-f304-4b88-9a71-ca3b01fe52d7',
+    idShort: 'e8c72914...52d7',
+    type: decSc.type,
+    status: 'Declined',
+    method: 'PIX',
+    source: 'OKTO',
+    amount: decSc.amount,
+    currency: decSc.currency,
+    domain: '.BR',
+    country: 'BR',
+    created: '15/06/2026 10:15:00',
+    updated: '15/06/2026 10:15:08',
+    playerId: decSc.playerId,
+    playerName: decSc.playerName,
+    extId: 'a0c91f22-4d78-41ab-b990-7e3a5dc11205',
+    details: decSc.details,
+    seon: { state: 'APPROVE', score: 21, rules: ['IP matches registration country', 'Known device'] },
+  } : TX;
+
+  const switchScenario = (s) => { setScenario(s); setLinked([]); setModal(null); };
+  const switchAp       = (s) => { setApScenario(s); setApAction(null); setApDeclineReason(''); setCc(false); };
+  const act = (a) => setToast({
+    approve: 'Payment approved — routing to PSP',
+    decline: 'Payment declined',
+    cancel:  'Payment cancelled',
+    retry:   'Retry queued',
+    force:   'Force-cancel submitted',
+  }[a]);
+  const onRefundConfirm = (m, data) => setLinked([{
+    t: '14:31:09', status: 'Refunded', by: 'System', actor: 'Refund service',
+    reason: `Linked refund · ${txData.currency} ${data.amount} returned to player`,
+    linked: 'a48f2325…RF1',
+  }]);
+
+  /* compute lifecycle for ap-manual example */
+  let apLife = LIFE_AP_MANUAL_BASE;
+  if (isApManual) {
+    if (apScenario === 'autopayment') {
+      apLife = LIFE_AP_AUTO;
+    } else if (apAction === 'approved') {
+      apLife = LIFE_AP_MANUAL_APPROVED;
+    } else if (apAction === 'declined') {
+      apLife = [
+        { t: '09:58:10', status: 'Declined',    by: 'Agent',  actor: 'Radu Florea',  reason: apDeclineReason || 'Declined by agent', desc: "Payment declined by Radu Florea after Autopayment escalation.", info: [['Decision', 'Manual decline'], ['Agent', 'Radu Florea'], ['Reason', apDeclineReason || 'Declined by agent']] },
+        { t: '09:58:03', status: 'Pending',     by: 'System', actor: 'Autopayment',  reason: 'Autopayment result was pending — payment needs manual review', desc: 'Autopayment could not make an automated decision. Payment was escalated to manual review.', info: [['Trigger', 'Autopayment escalation'], ['Queue', 'manual-review']] },
+        { t: '09:58:01', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+      ];
+    } else if (apAction === 'cancelled') {
+      apLife = [
+        { t: '09:58:10', status: 'Cancelled',   by: 'Agent',  actor: 'Radu Florea',  reason: 'Cancelled by payments agent', desc: "Payment cancelled by Radu Florea.", info: [['Agent', 'Radu Florea']] },
+        { t: '09:58:03', status: 'Pending',     by: 'System', actor: 'Autopayment',  reason: 'Autopayment result was pending — payment needs manual review', desc: 'Autopayment could not make an automated decision. Payment was escalated to manual review.', info: [['Trigger', 'Autopayment escalation'], ['Queue', 'manual-review']] },
+        { t: '09:58:01', status: 'Initialised', by: 'Player', actor: 'Player app',   reason: 'Checks passed', checks: true, desc: 'Player started the deposit. Pre-flight business checks ran at initiation.' },
+      ];
+    }
+  }
+
+  const base   = isAutoRefund ? LIFE_AUTO_REFUND
+               : isStuck      ? LIFE_STUCK_WITHDRAWAL
+               : isApManual   ? apLife
+               : isDeclined   ? makeDeclinedLife(decSc)
+               : scenario === 'approved' ? LIFE2 : LIFE2_PENDING;
+  const life   = (isAutoRefund || isStuck || isApManual || isDeclined) ? base : [...linked, ...base];
+  const status = isAutoRefund ? 'Refunded'
+               : isStuck      ? 'Sent to PSP'
+               : isDeclined   ? 'Declined'
+               : isApManual   ? (apScenario === 'autopayment' ? 'Paid'
+                                 : apAction === 'approved'   ? 'Paid'
+                                 : apAction === 'declined'   ? 'Declined'
+                                 : apAction === 'cancelled'  ? 'Cancelled'
+                                 : 'Pending')
+               : scenario === 'approved' ? 'Paid' : 'Pending';
+
+  const trayFor = (e) => {
+    if (isAutoRefund || isDeclined) return null;
+    if (isStuck && e.status === 'Sent to PSP') {
+      return (
+        <ActionTray>
+          <Btn size="sm" icon="sync" onClick={() => setCc(true)}>Consistency Check</Btn>
+        </ActionTray>
+      );
+    }
+    if (isApManual) {
+      if (apScenario === 'manual' && apAction === null && e.current) {
+        return (
+          <ActionTray tone="warn">
+            <Btn size="sm" icon="check" iconColor="var(--green-600)" onClick={() => setApAction('approved')}>Approve</Btn>
+            <Btn size="sm" icon="ban"   iconColor="var(--red-600)"   onClick={() => setDeclineModal(true)}>Decline</Btn>
+            <Btn size="sm" icon="trash"                              onClick={() => setApAction('cancelled')}>Cancel</Btn>
+          </ActionTray>
+        );
+      }
+      if (apScenario === 'manual' && apAction === 'approved' && e.status === 'Paid') {
+        return (
+          <ActionTray>
+            <Btn size="sm" icon="refund" onClick={() => setModal('refund')}>Refund</Btn>
+            <Btn size="sm" icon="sync"   onClick={() => setCc(true)}>Consistency Check</Btn>
+          </ActionTray>
+        );
+      }
+      return null;
+    }
+    if (scenario === 'pending' && e.current) {
+      return (
+        <ActionTray tone="warn">
+          <Btn size="sm" icon="check" iconColor="var(--green-600)" onClick={() => act('approve')}>Approve</Btn>
+          <Btn size="sm" icon="ban"   iconColor="var(--red-600)"   onClick={() => act('decline')}>Decline</Btn>
+          <Btn size="sm" icon="trash"                              onClick={() => act('cancel')}>Cancel</Btn>
+          <Btn size="sm" icon="retry"                              onClick={() => act('retry')}>Retry</Btn>
+          <Btn size="sm" icon="ban"                                onClick={() => act('force')}>Force Cancel</Btn>
+        </ActionTray>
+      );
+    }
+    if (scenario === 'approved' && e.status === 'Paid' && !e.linked) {
+      return (
+        <ActionTray>
+          <Btn size="sm" icon="refund" onClick={() => setModal('refund')}>Refund</Btn>
+          <Btn size="sm" icon="sync"   onClick={() => setCc(true)}>Consistency Check</Btn>
+        </ActionTray>
+      );
+    }
+    return null;
+  };
+
+  /* narrative banner for ap-manual */
+  const apBanner = !isApManual ? null
+    : apScenario === 'autopayment' ? (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'var(--green-50)', border: '1px solid #bce6cb', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)' }}>
+        <Icon name="bolt" size={15} style={{ color: 'var(--green-600)', flexShrink: 0 }} />
+        Fully automated — payment processed by Autopayment without manual intervention.
+      </div>
+    ) : apAction === null ? (
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px', background: 'var(--orange-50)', border: '1px solid #ffd9a6', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)', lineHeight: 1.5 }}>
+        <Icon name="alert" size={15} style={{ color: 'var(--orange-700)', flexShrink: 0, marginTop: 1 }} />
+        <span>Autopayment could not process this payment automatically. <strong>Manual review required.</strong></span>
+      </div>
+    ) : apAction === 'approved' ? (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'var(--green-50)', border: '1px solid #bce6cb', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)' }}>
+        <Icon name="check" size={15} style={{ color: 'var(--green-600)', flexShrink: 0 }} />
+        Manually approved by <strong style={{ marginLeft: 4 }}>Radu Florea</strong> — payment settled.
+      </div>
+    ) : apAction === 'declined' ? (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)' }}>
+        <Icon name="ban" size={15} style={{ color: 'var(--red-600)', flexShrink: 0 }} />
+        Declined by <strong style={{ margin: '0 4px' }}>Radu Florea</strong> — {apDeclineReason}
+      </div>
+    ) : (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'var(--neutral-100)', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-700)' }}>
+        <Icon name="close" size={15} style={{ color: 'var(--neutral-500)', flexShrink: 0 }} />
+        Cancelled by <strong style={{ marginLeft: 4 }}>Radu Florea</strong>.
+      </div>
+    );
+
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--neutral-50)', fontFamily: 'var(--font-body)', position: 'relative' }}>
+      <AdminHeader />
+      <div style={{ flex: 1, display: 'flex', minHeight: 0, overflow: 'hidden' }}>
+        <FinanceSidebar />
+        <main style={{ flex: 1, minWidth: 0, padding: '14px 18px 18px 0', display: 'flex', flexDirection: 'column', gap: 12, overflowY: 'auto' }}>
+
+          {/* command bar */}
+          <div style={{ background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-md)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--neutral-500)', fontWeight: 600, marginBottom: 3 }}>
+                {onBack
+                  ? <button onClick={onBack} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11.5, fontWeight: 600, color: 'var(--blue-600)', fontFamily: 'var(--font-sans)' }}><Icon name="chevR" size={11} style={{ transform: 'rotate(180deg)' }} />Examples</button>
+                  : <><span>Platform Transactions</span><Icon name="chevR" size={11} /><span style={{ color: 'var(--neutral-700)' }}>Detail</span></>}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, fontFamily: 'var(--font-sans)', letterSpacing: -0.2 }}>{txData.type} · {txData.currency} {txData.amount}</h1>
+                <StatusPill status={status} />
+                <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--neutral-500)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  {txData.idShort}<Icon name="copy" size={12} style={{ cursor: 'pointer' }} />
+                </span>
+              </div>
+            </div>
+            {!isAutoRefund && !isStuck && !isApManual && !isDeclined && (
+              <div style={{ marginLeft: 'auto' }}>
+                <Segmented value={scenario} onChange={switchScenario} options={['pending', 'approved']} />
+              </div>
+            )}
+            {isApManual && (
+              <div style={{ marginLeft: 'auto' }}>
+                <Segmented value={apScenario} onChange={switchAp} options={['autopayment', 'manual']} />
+              </div>
+            )}
+            {isDeclined && (
+              <div style={{ marginLeft: 'auto' }}>
+                <Segmented value={declinedKey} onChange={setDeclinedKey} options={DECLINED_SCENARIOS.map(function(s) { return { value: s.key, label: s.label }; })} />
+              </div>
+            )}
+          </div>
+
+          {/* summary strip */}
+          <div style={{ background: '#fff', border: '1px solid var(--neutral-200)', borderRadius: 'var(--radius-md)', padding: '14px 16px', display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '16px 20px' }}>
+            <KV label="Player ID"><span style={{ color: ADMIN.blueText }}>{txData.playerId}</span></KV>
+            <KV label="Type">{txData.type}</KV>
+            <KV label="Method"><Chip icon="bank">{txData.method}</Chip></KV>
+            <KV label="Source">{txData.source}</KV>
+            <KV label="Country"><Chip>{txData.country}</Chip></KV>
+            <KV label="Created" mono>{txData.created.split(' ')[1]}</KV>
+            <KV label="Updated" mono>{txData.updated.split(' ')[1]}</KV>
+          </div>
+
+          {/* 2-column body */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12, minHeight: 0 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
+
+              <Card title="Payment Information" icon="card" pad={16}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px 18px' }}>
+                  <KV label="Account / Card Name">{txData.playerName}</KV>
+                  <KV label="Details" mono>{txData.details}</KV>
+                  <KV label="External ID" mono copy>{txData.extId.slice(0, 18)}…</KV>
+                </div>
+              </Card>
+
+              <Card title="Payment Lifecycle" icon="clock" pad={16}
+                right={<span style={{ fontSize: 11, color: 'var(--neutral-500)', fontWeight: 600 }}>Actions are attached to each state</span>}>
+                {isStuck ? (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px', background: 'var(--blue-50)', border: '1px solid #b8dafc', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)', lineHeight: 1.5 }}>
+                    <Icon name="clock" size={15} style={{ color: 'var(--blue-700)', flexShrink: 0, marginTop: 1 }} />
+                    <span>Withdrawal sent to OKTO — <strong>no callback received</strong>. Platform status is frozen at Sent to PSP. Use Consistency Check to query OKTO directly.</span>
+                  </div>
+                ) : isAutoRefund ? (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px', background: 'var(--magenta-50)', border: '1px solid #ffbfdc', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)', lineHeight: 1.5 }}>
+                    <Icon name="info" size={15} style={{ color: 'var(--magenta-700)', flexShrink: 0, marginTop: 1 }} />
+                    <span>PSP accepted and settled the deposit, but our system detected a <strong>daily deposit limit breach</strong> post-settlement. An automatic refund was triggered.</span>
+                  </div>
+                ) : isDeclined ? (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px', background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)', lineHeight: 1.5 }}>
+                    <Icon name="alert" size={15} style={{ color: 'var(--red-600)', flexShrink: 0, marginTop: 1 }} />
+                    <span>{decSc.tldr}</span>
+                  </div>
+                ) : isApManual ? apBanner
+                : scenario === 'approved' ? (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px', background: 'var(--red-50)', border: '1px solid #f6c9c9', borderRadius: 'var(--radius-sm)', marginBottom: 16, fontSize: 12.5, color: 'var(--neutral-800)', lineHeight: 1.5 }}>
+                    <Icon name="alert" size={15} style={{ color: 'var(--red-600)', flexShrink: 0, marginTop: 1 }} />
+                    <span>Deposit declined by OKTO on the first attempt (<strong>DECLINE_NSF</strong> — insufficient funds). Player topped up and retried 17s later; payment settled successfully.</span>
+                  </div>
+                ) : null}
+                {life.map((e, i) => (
+                  <TimelineNode2 key={i} e={e} last={i === life.length - 1} actions={trayFor(e)} />
+                ))}
+              </Card>
+            </div>
+
+            {/* right rail */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <Card title="Risk · SEON" icon="shield" pad={14} right={<StatusPill status="Approved" size="sm" />}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', border: '4px solid var(--green-300)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 16, color: 'var(--neutral-900)', fontFamily: 'var(--font-sans)' }}>{txData.seon.score}</div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700 }}>Low risk score</div>
+                    <div style={{ fontSize: 11.5, color: 'var(--neutral-500)' }}>State: {txData.seon.state}</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {txData.seon.rules.map((r) => (
+                    <div key={r} style={{ display: 'flex', gap: 7, fontSize: 11.5, color: 'var(--neutral-700)', lineHeight: 1.4 }}>
+                      <Icon name="info" size={13} style={{ color: 'var(--orange-500)', flexShrink: 0, marginTop: 1 }} />{r}
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {!isDeclined && (!isApManual || (apScenario === 'manual' && apAction === 'approved')) && (
+                <Card title="Consistency Check" icon="sync" pad={14}>
+                  <ConsistencyCheck layout="full" onOpenModal={() => setCc(true)} />
+                </Card>
+              )}
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {toast && (
+        <div onClick={() => setToast(null)} style={{ position: 'fixed', bottom: 18, left: '50%', transform: 'translateX(-50%)', zIndex: 50, background: 'var(--neutral-900)', color: '#fff', padding: '10px 16px', borderRadius: 'var(--radius-md)', fontSize: 13, fontWeight: 600, boxShadow: 'var(--shadow-lg)', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+          <Icon name="info" size={15} />{toast}<span style={{ opacity: .6, marginLeft: 6 }}>✕</span>
+        </div>
+      )}
+      {modal && <ActionModal mode={modal} onClose={() => setModal(null)} onConfirm={onRefundConfirm} />}
+      {cc && !isStuck && <ConsistencyModal onClose={() => setCc(false)} />}
+      {cc && isStuck  && <ConsistencyModalMismatch onClose={() => setCc(false)} />}
+      {declineModal   && <ManualDeclineModal onClose={() => setDeclineModal(false)} onConfirm={(r) => { setApDeclineReason(r); setApAction('declined'); setDeclineModal(false); }} />}
+    </div>
+  );
+}
+
+/* ============================================================
+   EXAMPLES — home page cards
+   ============================================================ */
+const EXAMPLES = [
+  {
+    id: 'pix-approved-retry',
+    status: 'Paid',
+    method: 'PIX',
+    methodIcon: 'bank',
+    amount: 'BRL 120.00',
+    type: 'Deposit',
+    scenario: 'Approved on retry after NSF decline',
+    desc: 'First attempt declined for insufficient funds; player retried 17s later and payment settled.',
+    playerId: '33025761',
+  },
+  {
+    id: 'auto-refund-limit',
+    status: 'Refunded',
+    method: 'PIX',
+    methodIcon: 'bank',
+    amount: 'BRL 500.00',
+    type: 'Deposit',
+    scenario: 'Auto-refund on deposit limit breach',
+    desc: 'PSP accepted and settled the payment, but our system detected a daily limit breach post-settlement. An automatic refund was triggered.',
+    playerId: '44112983',
+  },
+  {
+    id: 'stuck-withdrawal',
+    status: 'Sent to PSP',
+    method: 'PIX',
+    methodIcon: 'bank',
+    amount: 'BRL 250.00',
+    type: 'Withdrawal',
+    scenario: 'Stuck at PSP — consistency mismatch',
+    desc: 'Withdrawal sent to OKTO with no callback received. Consistency check reveals PSP already paid the player.',
+    playerId: '57219834',
+  },
+  {
+    id: 'autopayment-manual',
+    status: 'Pending',
+    method: 'PIX',
+    methodIcon: 'bank',
+    amount: 'BRL 199.00',
+    type: 'Deposit',
+    scenario: 'Autopayment vs manual review',
+    desc: 'Toggle between fully automated Autopayment flow and manual review queue where an agent approves, declines, or cancels.',
+    playerId: '28834501',
+  },
+  {
+    id: 'declined-reasons',
+    status: 'Declined',
+    method: 'PIX',
+    methodIcon: 'bank',
+    amount: 'BRL —',
+    type: 'Deposit · Withdrawal',
+    scenario: 'Declined — common PSP reasons',
+    desc: 'Four real decline scenarios: invalid account data, session timeout, bank-side rejection, and fraud rule block (salary account).',
+    playerId: '—',
+  },
+];
+
+function ExampleCard({ ex, onClick }) {
+  const s = STATUS[ex.status] || STATUS.Initialised;
+  const [hov, setHov] = React.useState(false);
+  return (
+    <div onClick={onClick}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        background: '#fff', border: `1px solid ${hov ? 'var(--neutral-300)' : 'var(--neutral-200)'}`,
+        borderRadius: 'var(--radius-md)', padding: '16px 18px', cursor: 'pointer',
+        boxShadow: hov ? 'var(--shadow-md)' : 'var(--shadow-xs)',
+        transition: 'box-shadow .15s, border-color .15s',
+        display: 'flex', flexDirection: 'column', gap: 10,
+      }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <StatusPill status={ex.status} size="sm" />
+        <Chip icon={ex.methodIcon}>{ex.method}</Chip>
+        <span style={{ marginLeft: 'auto', fontSize: 16, fontWeight: 700, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-body)', color: 'var(--neutral-900)' }}>{ex.amount}</span>
+      </div>
+      <div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--neutral-500)', letterSpacing: 0.2 }}>{ex.type} · {ex.scenario}</div>
+        <div style={{ marginTop: 4, fontSize: 12.5, color: 'var(--neutral-700)', lineHeight: 1.5 }}>{ex.desc}</div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, borderTop: '1px solid var(--neutral-100)', paddingTop: 10, fontSize: 11.5, color: 'var(--neutral-500)', fontWeight: 600 }}>
+        <Icon name="user" size={13} />Player {ex.playerId}
+        <Icon name="chevR" size={13} style={{ marginLeft: 'auto', color: 'var(--neutral-400)' }} />
+      </div>
+    </div>
+  );
+}
+
+function HomePage({ onSelect }) {
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--neutral-50)', fontFamily: 'var(--font-body)' }}>
+      <AdminHeader />
+      <div style={{ flex: 1, display: 'flex', minHeight: 0, overflow: 'hidden' }}>
+        <FinanceSidebar />
+        <main style={{ flex: 1, minWidth: 0, padding: '20px 24px 24px 0', overflowY: 'auto' }}>
+          <div style={{ marginBottom: 20 }}>
+            <h1 style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-sans)', letterSpacing: -0.3, color: 'var(--neutral-900)' }}>Transaction Examples</h1>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--neutral-500)' }}>Direction D — Inline Actions prototype. Click a card to explore the transaction detail.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+            {EXAMPLES.map((ex) => (
+              <ExampleCard key={ex.id} ex={ex} onClick={() => onSelect(ex.id)} />
+            ))}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [page, setPage]             = React.useState('home');
+  const [selectedId, setSelectedId] = React.useState(null);
+  if (page === 'home') return <HomePage onSelect={(id) => { setSelectedId(id); setPage('detail'); }} />;
+  return <DirectionD exampleId={selectedId} onBack={() => setPage('home')} />;
+}
+
+/* ── mount ── */
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
